@@ -24,7 +24,9 @@ import {
 } from "lucide-react";
 import { DocumentView } from "./JsonView";
 import { Shell } from "./Shell";
+import { PortfolioView } from "./PortfolioViews";
 import {
+
   CLUSTER,
   DB_NAME,
   collections,
