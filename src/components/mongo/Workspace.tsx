@@ -7,7 +7,9 @@ import {
   FileJson,
   Folder,
   Layers,
+  LayoutGrid,
   List,
+
   Plus,
   RefreshCw,
   Search,
