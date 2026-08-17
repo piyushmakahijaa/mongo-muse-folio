@@ -3,7 +3,7 @@ import { ChevronRight } from "lucide-react";
 
 type Props = {
   value: unknown;
-  name?: string;
+  name?: string | undefined;
   depth?: number;
   defaultOpen?: boolean;
 };
