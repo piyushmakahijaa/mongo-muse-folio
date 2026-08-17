@@ -6,8 +6,12 @@ import {
   Database,
   FileJson,
   Folder,
+  Github,
   Layers,
+  LayoutGrid,
+  Linkedin,
   List,
+  Mail,
   Plus,
   RefreshCw,
   Search,
@@ -22,14 +26,18 @@ import {
 } from "lucide-react";
 import { DocumentView } from "./JsonView";
 import { Shell } from "./Shell";
+import { PortfolioView } from "./PortfolioViews";
+import { ConnectScreen } from "./ConnectScreen";
 import {
   CLUSTER,
   DB_NAME,
   collections,
+  contactDocs,
   documents,
   schemaOf,
   type Doc,
 } from "@/lib/portfolio-data";
+
 
 type TabId = "documents" | "aggregations" | "schema" | "indexes" | "validation";
 
@@ -64,7 +72,7 @@ function ToolbarButton({
 }
 
 function DocumentsTab({ docs, collectionId }: { docs: Doc[]; collectionId: string }) {
-  const [mode, setMode] = useState<"list" | "json" | "table">("list");
+  const [mode, setMode] = useState<"cards" | "list" | "json" | "table">("cards");
   const tableFields = useMemo(() => {
     const keys = new Set<string>();
     docs.forEach((d) => Object.keys(d).forEach((k) => keys.add(k)));
@@ -88,6 +96,7 @@ function DocumentsTab({ docs, collectionId }: { docs: Doc[]; collectionId: strin
           <div className="flex overflow-hidden rounded border border-border">
             {(
               [
+                ["cards", LayoutGrid],
                 ["list", List],
                 ["json", FileJson],
                 ["table", Table2],
@@ -109,7 +118,10 @@ function DocumentsTab({ docs, collectionId }: { docs: Doc[]; collectionId: strin
         </div>
       </div>
 
-      {mode === "table" ? (
+      {mode === "cards" ? (
+        <PortfolioView collectionId={collectionId} docs={docs} />
+      ) : mode === "table" ? (
+
         <div className="doc-in overflow-x-auto rounded border border-border bg-card">
           <table className="w-full border-collapse text-left font-mono text-[12px]">
             <thead>
@@ -314,11 +326,20 @@ function ValidationTab({ collectionId }: { collectionId: string }) {
   );
 }
 
+const contact = contactDocs[0]!;
+const ACTIONS = [
+  { label: "GitHub", href: String(contact["github"]), icon: Github },
+  { label: "LinkedIn", href: String(contact["linkedin"]), icon: Linkedin },
+  { label: "Email", href: `mailto:${String(contact["email"])}`, icon: Mail },
+];
+
 export function Workspace() {
+  const [connected, setConnected] = useState(false);
   const [active, setActive] = useState("profile");
   const [tab, setTab] = useState<TabId>("documents");
   const [shellOpen, setShellOpen] = useState(false);
   const [dbOpen, setDbOpen] = useState(true);
+
 
   const col = collections.find((c) => c.id === active)!;
   const docs = documents[active] ?? [];
@@ -331,7 +352,10 @@ export function Workspace() {
     { id: "validation", label: "Validation" },
   ];
 
+  if (!connected) return <ConnectScreen onConnect={() => setConnected(true)} />;
+
   return (
+
     <div className="flex h-screen flex-col overflow-hidden bg-surface">
       {/* menu bar */}
       <div className="flex shrink-0 items-center gap-5 border-b border-border bg-card px-4 py-1.5 text-[12px] text-foreground/70">
@@ -426,14 +450,28 @@ export function Workspace() {
               <X className="size-3 text-muted-foreground" />
             </div>
             <Plus className="mx-3 size-4 text-muted-foreground" />
-            <button
-              type="button"
-              onClick={() => setShellOpen((s) => !s)}
-              className="ml-auto inline-flex items-center gap-1.5 rounded border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-foreground hover:border-primary"
-            >
-              <TerminalSquare className="size-3.5 text-primary" />
-              {shellOpen ? "Close MongoDB shell" : "Open MongoDB shell"}
-            </button>
+            <div className="ml-auto flex items-center gap-1.5">
+              {ACTIONS.map((a) => (
+                <a
+                  key={a.label}
+                  href={a.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hidden items-center gap-1.5 rounded border border-border bg-card px-2.5 py-1.5 text-[12px] font-medium text-foreground/80 hover:border-primary hover:text-primary sm:inline-flex"
+                >
+                  <a.icon className="size-3.5" /> {a.label}
+                </a>
+              ))}
+              <button
+                type="button"
+                onClick={() => setShellOpen((s) => !s)}
+                className="inline-flex items-center gap-1.5 rounded border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-foreground hover:border-primary"
+              >
+                <TerminalSquare className="size-3.5 text-primary" />
+                {shellOpen ? "Close shell" : "MongoDB shell"}
+              </button>
+            </div>
+
           </div>
 
           {/* mobile collection picker */}
