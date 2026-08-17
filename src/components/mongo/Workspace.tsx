@@ -64,7 +64,7 @@ function ToolbarButton({
 }
 
 function DocumentsTab({ docs, collectionId }: { docs: Doc[]; collectionId: string }) {
-  const [mode, setMode] = useState<"list" | "json" | "table">("list");
+  const [mode, setMode] = useState<"cards" | "list" | "json" | "table">("cards");
   const tableFields = useMemo(() => {
     const keys = new Set<string>();
     docs.forEach((d) => Object.keys(d).forEach((k) => keys.add(k)));
@@ -88,6 +88,7 @@ function DocumentsTab({ docs, collectionId }: { docs: Doc[]; collectionId: strin
           <div className="flex overflow-hidden rounded border border-border">
             {(
               [
+                ["cards", LayoutGrid],
                 ["list", List],
                 ["json", FileJson],
                 ["table", Table2],
@@ -109,7 +110,10 @@ function DocumentsTab({ docs, collectionId }: { docs: Doc[]; collectionId: strin
         </div>
       </div>
 
-      {mode === "table" ? (
+      {mode === "cards" ? (
+        <PortfolioView collectionId={collectionId} docs={docs} />
+      ) : mode === "table" ? (
+
         <div className="doc-in overflow-x-auto rounded border border-border bg-card">
           <table className="w-full border-collapse text-left font-mono text-[12px]">
             <thead>
