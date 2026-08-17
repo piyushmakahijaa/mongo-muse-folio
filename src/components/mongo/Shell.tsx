@@ -47,7 +47,9 @@ export function Shell({
         },
       ]);
     if (cmd === "show collections" || cmd === "show dbs")
-      return push([{ kind: "out", text: collections.map((c) => `${c.name}  (${c.count} docs)`).join("\n") }]);
+      return push([
+        { kind: "out", text: collections.map((c) => `${c.name}  (${c.count} docs)`).join("\n") },
+      ]);
     if (cmd === "db.stats()")
       return push([
         {
@@ -64,7 +66,10 @@ export function Shell({
       if (!found) return push([{ kind: "err", text: `ns not found: ${DB_NAME}.${target}` }]);
       onSelect(found.id);
       return push([
-        { kind: "out", text: `switched to ${DB_NAME}.${found.name} — ${found.count} document(s) rendered above.` },
+        {
+          kind: "out",
+          text: `switched to ${DB_NAME}.${found.name} — ${found.count} document(s) rendered above.`,
+        },
       ]);
     }
 
@@ -78,12 +83,14 @@ export function Shell({
   }
 
   return (
-    <div className="flex h-full flex-col overflow-hidden border-t border-border bg-background/80">
-      <div className="flex items-center justify-between border-b border-border/70 px-4 py-2">
+    <div className="flex h-full flex-col overflow-hidden border-t border-border bg-surface">
+      <div className="flex items-center justify-between border-b border-border px-4 py-2">
         <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
           mongosh
         </span>
-        <span className="font-mono text-[11px] text-leaf/70">{DB_NAME}.{active}</span>
+        <span className="font-mono text-[11px] text-primary">
+          {DB_NAME}.{active}
+        </span>
       </div>
       <div ref={scrollRef} className="min-h-0 flex-1 space-y-1.5 overflow-y-auto px-4 py-3">
         {lines.map((l, i) => (
@@ -101,15 +108,18 @@ export function Shell({
           </pre>
         ))}
       </div>
-      <form onSubmit={submit} className="flex items-center gap-2 border-t border-border/70 px-4 py-2.5">
-        <span className="font-mono text-[12px] text-leaf">&gt;</span>
+      <form
+        onSubmit={submit}
+        className="flex items-center gap-2 border-t border-border bg-card px-4 py-2.5"
+      >
+        <span className="font-mono text-[12px] text-primary">&gt;</span>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           spellCheck={false}
           aria-label="mongosh command input"
           placeholder="db.projects.find()"
-          className="w-full bg-transparent font-mono text-[12px] text-foreground outline-none placeholder:text-muted-foreground/50"
+          className="w-full bg-transparent font-mono text-[12px] text-foreground outline-none placeholder:text-muted-foreground/60"
         />
       </form>
     </div>
