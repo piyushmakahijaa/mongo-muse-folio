@@ -6,10 +6,12 @@ import {
   Database,
   FileJson,
   Folder,
+  Github,
   Layers,
   LayoutGrid,
+  Linkedin,
   List,
-
+  Mail,
   Plus,
   RefreshCw,
   Search,
@@ -25,15 +27,17 @@ import {
 import { DocumentView } from "./JsonView";
 import { Shell } from "./Shell";
 import { PortfolioView } from "./PortfolioViews";
+import { ConnectScreen } from "./ConnectScreen";
 import {
-
   CLUSTER,
   DB_NAME,
   collections,
+  contactDocs,
   documents,
   schemaOf,
   type Doc,
 } from "@/lib/portfolio-data";
+
 
 type TabId = "documents" | "aggregations" | "schema" | "indexes" | "validation";
 
