@@ -352,7 +352,10 @@ export function Workspace() {
     { id: "validation", label: "Validation" },
   ];
 
+  if (!connected) return <ConnectScreen onConnect={() => setConnected(true)} />;
+
   return (
+
     <div className="flex h-screen flex-col overflow-hidden bg-surface">
       {/* menu bar */}
       <div className="flex shrink-0 items-center gap-5 border-b border-border bg-card px-4 py-1.5 text-[12px] text-foreground/70">
