@@ -322,11 +322,20 @@ function ValidationTab({ collectionId }: { collectionId: string }) {
   );
 }
 
+const contact = contactDocs[0]!;
+const ACTIONS = [
+  { label: "GitHub", href: String(contact["github"]), icon: Github },
+  { label: "LinkedIn", href: String(contact["linkedin"]), icon: Linkedin },
+  { label: "Email", href: `mailto:${String(contact["email"])}`, icon: Mail },
+];
+
 export function Workspace() {
+  const [connected, setConnected] = useState(false);
   const [active, setActive] = useState("profile");
   const [tab, setTab] = useState<TabId>("documents");
   const [shellOpen, setShellOpen] = useState(false);
   const [dbOpen, setDbOpen] = useState(true);
+
 
   const col = collections.find((c) => c.id === active)!;
   const docs = documents[active] ?? [];
