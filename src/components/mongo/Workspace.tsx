@@ -434,14 +434,28 @@ export function Workspace() {
               <X className="size-3 text-muted-foreground" />
             </div>
             <Plus className="mx-3 size-4 text-muted-foreground" />
-            <button
-              type="button"
-              onClick={() => setShellOpen((s) => !s)}
-              className="ml-auto inline-flex items-center gap-1.5 rounded border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-foreground hover:border-primary"
-            >
-              <TerminalSquare className="size-3.5 text-primary" />
-              {shellOpen ? "Close MongoDB shell" : "Open MongoDB shell"}
-            </button>
+            <div className="ml-auto flex items-center gap-1.5">
+              {ACTIONS.map((a) => (
+                <a
+                  key={a.label}
+                  href={a.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hidden items-center gap-1.5 rounded border border-border bg-card px-2.5 py-1.5 text-[12px] font-medium text-foreground/80 hover:border-primary hover:text-primary sm:inline-flex"
+                >
+                  <a.icon className="size-3.5" /> {a.label}
+                </a>
+              ))}
+              <button
+                type="button"
+                onClick={() => setShellOpen((s) => !s)}
+                className="inline-flex items-center gap-1.5 rounded border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-foreground hover:border-primary"
+              >
+                <TerminalSquare className="size-3.5 text-primary" />
+                {shellOpen ? "Close shell" : "MongoDB shell"}
+              </button>
+            </div>
+
           </div>
 
           {/* mobile collection picker */}
